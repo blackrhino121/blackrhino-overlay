@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Black Rhino - Alerts</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 600px;
+  height: 300px;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-box {
+  transform: scale(0);
+  background: linear-gradient(180deg, rgba(26,30,18,0.98) 0%, rgba(20,24,14,0.95) 100%);
+  border: 4px solid #6b8e23;
+  padding: 30px 60px;
+  text-align: center;
+  box-shadow: 
+    0 0 40px rgba(107,142,35,0.7),
+    0 0 80px rgba(107,142,35,0.5),
+    inset 0 0 40px rgba(107,142,35,0.25);
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.alert-box.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.alert-type {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: #6b8e23;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px rgba(107,142,35,1);
+}
+
+.alert-username {
+  font-family: 'Black Ops One', cursive;
+  font-size: 52px;
+  color: #fff;
+  text-shadow: 
+    0 0 25px rgba(255,255,255,0.6),
+    0 0 50px rgba(107,142,35,0.5);
+  animation: usernameGlow 2s ease-in-out infinite;
+}
+
+@keyframes usernameGlow {
+  0%, 100% { text-shadow: 0 0 25px rgba(255,255,255,0.6), 0 0 50px rgba(107,142,35,0.5); }
+  50% { text-shadow: 0 0 40px rgba(255,255,255,0.9), 0 0 80px rgba(107,142,35,0.7); }
+}
+
+.alert-action {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: #8a9a6a;
+  margin-top: 10px;
+}
+
+.alert-amount {
+  font-family: 'Black Ops One', cursive;
+  font-size: 36px;
+  color: #22c55e;
+  margin-top: 15px;
+  text-shadow: 0 0 25px rgba(34,197,94,0.8);
+}
+
+/* Corner accents */
+.corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #6b8e23;
+}
+.corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+</style>
+</head>
+<body>
+
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<div class="alert-box" id="alert">
+  <div class="alert-type" id="alert-type">NEW FOLLOW</div>
+  <div class="alert-username" id="alert-user">USERNAME</div>
+  <div class="alert-action" id="alert-action">has entered the AO</div>
+  <div class="alert-amount" id="alert-amount"></div>
+</div>
+
+<script>
+function showAlert(type, username, amount = '') {
+  const alert = document.getElementById('alert');
+  const configs = {
+    follow: { text: 'NEW RECRUIT', action: 'has entered the AO', color: '#3b82f6' },
+    sub: { text: 'OPERATOR JOINED', action: 'has enlisted', color: '#a855f7' },
+    raid: { text: 'SQUAD INCOMING', action: 'deploying with', color: '#ef4444' },
+    bits: { text: 'ORDNANCE DROPPED', action: 'supplied', color: '#f59e0b' },
+    dono: { text: 'SUPPLY DROP', action: 'delivered', color: '#22c55e' }
+  };
+
+  const cfg = configs[type] || configs.follow;
+
+  document.getElementById('alert-type').textContent = cfg.text;
+  document.getElementById('alert-type').style.color = cfg.color;
+  document.getElementById('alert-user').textContent = username;
+  document.getElementById('alert-action').textContent = cfg.action;
+  document.getElementById('alert-amount').textContent = amount;
+
+  alert.classList.add('show');
+  setTimeout(() => alert.classList.remove('show'), 6000);
+}
+
+// Connect to StreamElements or parent window
+window.showAlert = showAlert;
+
+// Listen for messages from parent overlay
+window.addEventListener('message', (e) => {
+  if (e.data.type === 'alert') {
+    showAlert(e.data.alertType, e.data.username, e.data.amount);
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Black Rhino - Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 320px;
+  height: 420px;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.chat-container {
+  width: 100%;
+  height: 100%;
+}
+
+.chat-header {
+  background: linear-gradient(90deg, #4a5d23, transparent);
+  padding: 12px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #fff;
+  border-left: 4px solid #6b8e23;
+  text-shadow: 0 0 15px rgba(107,142,35,0.9);
+  box-shadow: 0 0 20px rgba(107,142,35,0.4);
+  animation: headerGlow 3s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(107,142,35,0.4); }
+  50% { box-shadow: 0 0 30px rgba(107,142,35,0.7); }
+}
+
+.chat-messages {
+  height: calc(100% - 45px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat-message {
+  padding: 10px 15px;
+  margin-top: 5px;
+  background: rgba(20,24,14,0.9);
+  border-left: 3px solid #4a5d23;
+  animation: chatSlide 0.4s ease-out;
+  box-shadow: 0 0 10px rgba(107,142,35,0.2);
+}
+
+@keyframes chatSlide {
+  from { transform: translateX(30px); opacity: 0; box-shadow: 0 0 20px rgba(107,142,35,0.6); }
+  to { transform: translateX(0); opacity: 1; box-shadow: 0 0 10px rgba(107,142,35,0.2); }
+}
+
+.chat-username {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+.chat-text {
+  font-size: 14px;
+  color: #c8d4a8;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.chat-badge {
+  display: inline-block;
+  background: #6b8e23;
+  color: #1a1e12;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  margin-right: 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 0 5px rgba(107,142,35,0.5);
+}
+
+.chat-message.sub .chat-username { color: #a855f7; text-shadow: 0 0 10px rgba(168,85,247,0.6); }
+.chat-message.mod .chat-username { color: #22c55e; text-shadow: 0 0 10px rgba(34,197,94,0.6); }
+.chat-message.vip .chat-username { color: #f59e0b; text-shadow: 0 0 10px rgba(245,158,11,0.6); }
+.chat-message.broadcaster .chat-username { color: #ff4444; text-shadow: 0 0 10px rgba(255,68,68,0.6); }
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">COMMS // CHAT</div>
+  <div class="chat-messages" id="chat-messages"></div>
+</div>
+
+<script>
+const chatEl = document.getElementById('chat-messages');
+
+function addMessage(username, message, type = 'normal', badges = []) {
+  const msg = document.createElement('div');
+  msg.className = `chat-message ${type}`;
+
+  let badgeHTML = '';
+  badges.forEach(b => {
+    const badgeMap = {
+      'subscriber': 'SUB',
+      'moderator': 'MOD',
+      'vip': 'VIP',
+      'broadcaster': 'HOST'
+    };
+    if (badgeMap[b]) badgeHTML += `<span class="chat-badge">${badgeMap[b]}</span>`;
+  });
+
+  msg.innerHTML = `
+    <div class="chat-username">${badgeHTML}${username}</div>
+    <div class="chat-text">${message}</div>
+  `;
+
+  chatEl.appendChild(msg);
+
+  // Keep only last 12 messages
+  while (chatEl.children.length > 12) {
+    chatEl.removeChild(chatEl.firstChild);
+  }
+}
+
+// Expose to parent window
+window.addChat = addMessage;
+
+// Listen for messages from parent
+window.addEventListener('message', (e) => {
+  if (e.data.type === 'chat') {
+    addMessage(e.data.username, e.data.message, e.data.userType, e.data.badges);
+  }
+});
+</script>
+
+</body>
+</html>

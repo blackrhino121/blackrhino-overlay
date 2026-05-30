@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Black Rhino Overlay - DEMO</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #1a1e12;
+  color: #c8d4a8;
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+h1 { color: #6b8e23; }
+button {
+  background: #4a5d23;
+  color: #fff;
+  border: 2px solid #6b8e23;
+  padding: 15px 30px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+button:hover {
+  background: #6b8e23;
+  box-shadow: 0 0 20px rgba(107,142,35,0.5);
+}
+.preview {
+  border: 3px solid #6b8e23;
+  margin: 20px 0;
+  background: #000;
+}
+.status {
+  padding: 20px;
+  background: rgba(20,24,14,0.8);
+  border-left: 4px solid #6b8e23;
+  margin: 20px 0;
+}
+</style>
+</head>
+<body>
+
+<h1>🎖️ BLACK RHINO OVERLAY DEMO</h1>
+
+<div class="status">
+  <strong>Status:</strong> Test the overlay before uploading to GitHub Pages
+</div>
+
+<h2>Test Alerts</h2>
+<button onclick="testFollow()">Test Follow</button>
+<button onclick="testSub()">Test Sub</button>
+<button onclick="testRaid()">Test Raid</button>
+<button onclick="testBits()">Test Bits</button>
+<button onclick="testDono()">Test Donation</button>
+
+<h2>Test Chat</h2>
+<button onclick="testChat()">Test Chat Message</button>
+<button onclick="testSubChat()">Test Sub Chat</button>
+<button onclick="testModChat()">Test Mod Chat</button>
+
+<h2>Test Events</h2>
+<button onclick="testEvent()">Test Event</button>
+
+<h2>Preview (1920x1080 scaled down)</h2>
+<iframe id="overlay" src="index.html" class="preview" width="960" height="540"></iframe>
+
+<script>
+const overlay = document.getElementById('overlay').contentWindow;
+
+function testFollow() {
+  overlay.postMessage({
+    type: 'alert',
+    alertType: 'follow',
+    username: 'TactiCool_Operator',
+    amount: ''
+  }, '*');
+  overlay.postMessage({
+    type: 'event',
+    eventType: 'follow',
+    username: 'TactiCool_Operator',
+    details: ''
+  }, '*');
+}
+
+function testSub() {
+  overlay.postMessage({
+    type: 'alert',
+    alertType: 'sub',
+    username: 'SniperElite',
+    amount: ''
+  }, '*');
+  overlay.postMessage({
+    type: 'event',
+    eventType: 'sub',
+    username: 'SniperElite',
+    details: ''
+  }, '*');
+}
+
+function testRaid() {
+  overlay.postMessage({
+    type: 'alert',
+    alertType: 'raid',
+    username: 'SquadLeader_TV',
+    amount: '25 viewers'
+  }, '*');
+  overlay.postMessage({
+    type: 'event',
+    eventType: 'raid',
+    username: 'SquadLeader_TV',
+    details: '25 viewers'
+  }, '*');
+}
+
+function testBits() {
+  overlay.postMessage({
+    type: 'alert',
+    alertType: 'bits',
+    username: 'FragMaster',
+    amount: '500 bits'
+  }, '*');
+  overlay.postMessage({
+    type: 'event',
+    eventType: 'bits',
+    username: 'FragMaster',
+    details: '500'
+  }, '*');
+}
+
+function testDono() {
+  overlay.postMessage({
+    type: 'alert',
+    alertType: 'dono',
+    username: 'Supporter_123',
+    amount: '$10.00'
+  }, '*');
+  overlay.postMessage({
+    type: 'event',
+    eventType: 'dono',
+    username: 'Supporter_123',
+    details: '$10.00'
+  }, '*');
+}
+
+function testChat() {
+  overlay.postMessage({
+    type: 'chat',
+    username: 'ViewerOne',
+    message: 'Nice shot on that extraction!',
+    userType: 'normal',
+    badges: []
+  }, '*');
+}
+
+function testSubChat() {
+  overlay.postMessage({
+    type: 'chat',
+    username: 'TactiCool',
+    message: 'GG that was clean!',
+    userType: 'sub',
+    badges: ['subscriber']
+  }, '*');
+}
+
+function testModChat() {
+  overlay.postMessage({
+    type: 'chat',
+    username: 'ChatMod',
+    message: 'Welcome everyone!',
+    userType: 'mod',
+    badges: ['moderator']
+  }, '*');
+}
+
+function testEvent() {
+  overlay.postMessage({
+    type: 'event',
+    eventType: 'follow',
+    username: 'NewFollower_' + Math.floor(Math.random() * 999),
+    details: ''
+  }, '*');
+}
+
+// Auto-test on load
+setTimeout(() => {
+  testFollow();
+  setTimeout(testChat, 1000);
+  setTimeout(testSubChat, 2000);
+}, 1000);
+</script>
+
+</body>
+</html>

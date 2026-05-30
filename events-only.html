@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Black Rhino - Events</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 280px;
+  height: 250px;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.event-panel {
+  width: 100%;
+  height: 100%;
+}
+
+.event-header {
+  background: linear-gradient(90deg, #4a5d23, transparent);
+  padding: 10px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #fff;
+  border-left: 4px solid #6b8e23;
+  text-shadow: 0 0 15px rgba(107,142,35,0.9);
+  box-shadow: 0 0 20px rgba(107,142,35,0.4);
+  animation: headerGlow 3s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(107,142,35,0.4); }
+  50% { box-shadow: 0 0 30px rgba(107,142,35,0.7); }
+}
+
+.event-list {
+  height: calc(100% - 45px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  margin-top: 4px;
+  background: rgba(20,24,14,0.9);
+  border-left: 3px solid #4a5d23;
+  font-size: 13px;
+  animation: slideInGlow 0.5s ease-out;
+  box-shadow: 0 0 12px rgba(107,142,35,0.3);
+}
+
+@keyframes slideInGlow {
+  0% { transform: translateX(40px); opacity: 0; box-shadow: 0 0 25px rgba(107,142,35,0.8); }
+  50% { box-shadow: 0 0 35px rgba(107,142,35,1); }
+  100% { transform: translateX(0); opacity: 1; box-shadow: 0 0 12px rgba(107,142,35,0.3); }
+}
+
+.event-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  animation: iconPulse 0.8s ease-in-out 3;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+.event-follow .event-icon { background: #3b82f6; color: #fff; box-shadow: 0 0 15px rgba(59,130,246,0.6); }
+.event-sub .event-icon { background: #a855f7; color: #fff; box-shadow: 0 0 15px rgba(168,85,247,0.6); }
+.event-raid .event-icon { background: #ef4444; color: #fff; box-shadow: 0 0 15px rgba(239,68,68,0.6); }
+.event-bits .event-icon { background: #f59e0b; color: #fff; box-shadow: 0 0 15px rgba(245,158,11,0.6); }
+.event-dono .event-icon { background: #22c55e; color: #fff; box-shadow: 0 0 15px rgba(34,197,94,0.6); }
+
+.event-user {
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255,255,255,0.4);
+}
+.event-type {
+  color: #8a9a6a;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="event-panel">
+  <div class="event-header">TACTICAL LOG</div>
+  <div class="event-list" id="event-list"></div>
+</div>
+
+<script>
+const eventList = document.getElementById('event-list');
+
+function addEvent(type, username, details = '') {
+  const item = document.createElement('div');
+  item.className = `event-item event-${type}`;
+
+  const icons = {
+    follow: '+',
+    sub: '★',
+    raid: '⚔',
+    bits: '◆',
+    dono: '$'
+  };
+
+  const typeLabels = {
+    follow: 'followed',
+    sub: 'subscribed',
+    raid: 'raided',
+    bits: 'cheered',
+    dono: 'donated'
+  };
+
+  item.innerHTML = `
+    <div class="event-icon">${icons[type] || '+'}</div>
+    <div>
+      <div class="event-user">${username}</div>
+      <div class="event-type">${typeLabels[type] || type} ${details}</div>
+    </div>
+  `;
+
+  eventList.appendChild(item);
+
+  while (eventList.children.length > 5) {
+    eventList.removeChild(eventList.firstChild);
+  }
+}
+
+// Expose to parent
+window.addEvent = addEvent;
+
+// Listen for messages
+window.addEventListener('message', (e) => {
+  if (e.data.type === 'event') {
+    addEvent(e.data.eventType, e.data.username, e.data.details);
+  }
+});
+</script>
+
+</body>
+</html>

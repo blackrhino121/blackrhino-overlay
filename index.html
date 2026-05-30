@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Rhino Gaming - GZW Overlay</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Rajdhani', sans-serif;
+  color: #c8d4a8;
+}
+
+/* ── Tactical corners ── */
+.corner {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 4px solid #6b8e23;
+  animation: cornerGlow 2s ease-in-out infinite;
+  box-shadow: 0 0 15px rgba(107,142,35,0.6);
+}
+.corner-tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.corner-tr { top: 8px; right: 8px; border-left: none; border-bottom: none; animation-delay: 0.5s; }
+.corner-bl { bottom: 8px; left: 8px; border-right: none; border-top: none; animation-delay: 1s; }
+.corner-br { bottom: 8px; right: 8px; border-left: none; border-top: none; animation-delay: 1.5s; }
+
+@keyframes cornerGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(107,142,35,0.6), 0 0 20px rgba(107,142,35,0.4); }
+  50% { box-shadow: 0 0 25px rgba(107,142,35,0.9), 0 0 50px rgba(107,142,35,0.6); }
+}
+
+/* ── Top banner ── */
+.top-banner {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 35px;
+  background: linear-gradient(180deg, rgba(26,30,18,0.98) 0%, rgba(20,24,14,0.9) 100%);
+  border: 3px solid #4a5d23;
+  border-radius: 3px;
+  box-shadow: 
+    0 0 25px rgba(107,142,35,0.5),
+    0 0 50px rgba(107,142,35,0.3),
+    inset 0 0 25px rgba(107,142,35,0.15);
+  animation: bannerPulse 3s ease-in-out infinite;
+}
+
+@keyframes bannerPulse {
+  0%, 100% { box-shadow: 0 0 25px rgba(107,142,35,0.5), 0 0 50px rgba(107,142,35,0.3), inset 0 0 25px rgba(107,142,35,0.15); }
+  50% { box-shadow: 0 0 40px rgba(107,142,35,0.7), 0 0 80px rgba(107,142,35,0.4), inset 0 0 40px rgba(107,142,35,0.25); }
+}
+
+.top-banner .logo-text {
+  font-family: 'Black Ops One', cursive;
+  font-size: 32px;
+  color: #6b8e23;
+  text-shadow: 
+    0 0 15px rgba(107,142,35,0.9),
+    0 0 30px rgba(107,142,35,0.5),
+    0 0 45px rgba(107,142,35,0.3);
+  letter-spacing: 4px;
+  animation: textFlicker 4s infinite;
+}
+
+@keyframes textFlicker {
+  0%, 90%, 100% { opacity: 1; }
+  92% { opacity: 0.7; }
+  94% { opacity: 1; }
+  96% { opacity: 0.8; }
+}
+
+.top-banner .divider {
+  width: 3px;
+  height: 30px;
+  background: linear-gradient(180deg, transparent, #4a5d23, transparent);
+}
+
+.top-banner .status {
+  font-size: 16px;
+  font-weight: 700;
+  color: #a8c060;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.top-banner .status::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: #ff4444;
+  border-radius: 50%;
+  margin-right: 12px;
+  animation: livePulse 1s ease-in-out infinite;
+  vertical-align: middle;
+  box-shadow: 0 0 15px #ff4444;
+}
+
+@keyframes livePulse {
+  0%, 100% { 
+    opacity: 1; 
+    box-shadow: 0 0 8px #ff4444, 0 0 15px #ff4444, 0 0 30px #ff4444;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.5; 
+    box-shadow: 0 0 20px #ff4444, 0 0 40px #ff4444, 0 0 70px #ff4444;
+    transform: scale(1.3);
+  }
+}
+
+/* ── Event list ── */
+.event-panel {
+  position: absolute;
+  top: 90px;
+  right: 30px;
+  width: 300px;
+}
+
+.event-header {
+  background: linear-gradient(90deg, #4a5d23, transparent);
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #fff;
+  border-left: 5px solid #6b8e23;
+  text-shadow: 0 0 15px rgba(107,142,35,0.9);
+  box-shadow: 0 0 20px rgba(107,142,35,0.4);
+  animation: headerGlow 3s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(107,142,35,0.4); }
+  50% { box-shadow: 0 0 30px rgba(107,142,35,0.7); }
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  margin-top: 5px;
+  background: rgba(20,24,14,0.9);
+  border-left: 4px solid #4a5d23;
+  font-size: 14px;
+  animation: slideInGlow 0.6s ease-out;
+  box-shadow: 0 0 15px rgba(107,142,35,0.3);
+}
+
+@keyframes slideInGlow {
+  0% { transform: translateX(40px); opacity: 0; box-shadow: 0 0 30px rgba(107,142,35,0.8); }
+  50% { box-shadow: 0 0 40px rgba(107,142,35,1); }
+  100% { transform: translateX(0); opacity: 1; box-shadow: 0 0 15px rgba(107,142,35,0.3); }
+}
+
+.event-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  animation: iconPulse 0.8s ease-in-out 3;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.event-follow .event-icon { background: #3b82f6; color: #fff; box-shadow: 0 0 15px rgba(59,130,246,0.6); }
+.event-sub .event-icon { background: #a855f7; color: #fff; box-shadow: 0 0 15px rgba(168,85,247,0.6); }
+.event-raid .event-icon { background: #ef4444; color: #fff; box-shadow: 0 0 15px rgba(239,68,68,0.6); }
+.event-bits .event-icon { background: #f59e0b; color: #fff; box-shadow: 0 0 15px rgba(245,158,11,0.6); }
+.event-dono .event-icon { background: #22c55e; color: #fff; box-shadow: 0 0 15px rgba(34,197,94,0.6); }
+
+.event-user { font-weight: 700; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+.event-type { color: #8a9a6a; font-size: 12px; }
+
+/* ── Chat box ── */
+.chat-container {
+  position: absolute;
+  top: 350px;
+  right: 30px;
+  width: 320px;
+  max-height: 400px;
+}
+
+.chat-header {
+  background: linear-gradient(90deg, #4a5d23, transparent);
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #fff;
+  border-left: 5px solid #6b8e23;
+  text-shadow: 0 0 12px rgba(107,142,35,0.8);
+  box-shadow: 0 0 15px rgba(107,142,35,0.3);
+}
+
+.chat-messages {
+  max-height: 350px;
+  overflow: hidden;
+}
+
+.chat-message {
+  padding: 8px 15px;
+  margin-top: 4px;
+  background: rgba(20,24,14,0.85);
+  border-left: 3px solid #4a5d23;
+  animation: chatSlide 0.3s ease-out;
+}
+
+@keyframes chatSlide {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.chat-username {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.chat-text { font-size: 14px; color: #c8d4a8; line-height: 1.3; }
+.chat-badge {
+  display: inline-block;
+  background: #6b8e23;
+  color: #1a1e12;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  margin-right: 5px;
+  border-radius: 2px;
+}
+
+.chat-message.sub .chat-username { color: #a855f7; text-shadow: 0 0 8px rgba(168,85,247,0.5); }
+.chat-message.mod .chat-username { color: #22c55e; text-shadow: 0 0 8px rgba(34,197,94,0.5); }
+.chat-message.vip .chat-username { color: #f59e0b; text-shadow: 0 0 8px rgba(245,158,11,0.5); }
+
+/* ── Sub goal ── */
+.goal-container {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 450px;
+}
+
+.goal-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+  color: #8a9a6a;
+  text-shadow: 0 0 5px rgba(107,142,35,0.3);
+}
+
+.goal-bar {
+  height: 14px;
+  background: rgba(20,24,14,0.9);
+  border: 2px solid #4a5d23;
+  box-shadow: 0 0 15px rgba(107,142,35,0.4);
+  overflow: hidden;
+  position: relative;
+}
+
+.goal-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4a5d23, #6b8e23, #8fb355, #6b8e23);
+  background-size: 200% 100%;
+  animation: fillShimmer 2s linear infinite, fillPulse 3s ease-in-out infinite;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+@keyframes fillShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes fillPulse {
+  0%, 100% { box-shadow: inset 0 0 10px rgba(107,142,35,0.5); }
+  50% { box-shadow: inset 0 0 20px rgba(107,142,35,0.8); }
+}
+
+/* ── Bottom bar ── */
+.bottom-bar {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 35px;
+  padding: 10px 40px;
+  background: rgba(20,24,14,0.95);
+  border-top: 3px solid #4a5d23;
+  box-shadow: 0 0 30px rgba(107,142,35,0.4), inset 0 8px 20px rgba(107,142,35,0.15);
+  animation: bottomBarGlow 4s ease-in-out infinite;
+}
+
+@keyframes bottomBarGlow {
+  0%, 100% { box-shadow: 0 0 25px rgba(107,142,35,0.4), inset 0 8px 20px rgba(107,142,35,0.15); }
+  50% { box-shadow: 0 0 40px rgba(107,142,35,0.6), inset 0 8px 30px rgba(107,142,35,0.25); }
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.info-label { color: #6b8e23; text-shadow: 0 0 8px rgba(107,142,35,0.6); }
+.info-value { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,0.4); }
+
+/* ── Scanlines ── */
+.scanline {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(107,142,35,0.06) 3px,
+    rgba(107,142,35,0.06) 6px
+  );
+  pointer-events: none;
+  z-index: 100;
+  animation: scanlineMove 15s linear infinite;
+}
+
+@keyframes scanlineMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 150px; }
+}
+
+/* ── Crosshair ── */
+.crosshair-h {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px; height: 2px;
+  background: rgba(107,142,35,0.25);
+  animation: crosshairPulse 4s ease-in-out infinite;
+}
+.crosshair-v {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px; height: 40px;
+  background: rgba(107,142,35,0.25);
+  animation: crosshairPulse 4s ease-in-out infinite;
+}
+
+@keyframes crosshairPulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Alert popup ── */
+.alert-box {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: linear-gradient(180deg, rgba(26,30,18,0.98) 0%, rgba(20,24,14,0.95) 100%);
+  border: 3px solid #6b8e23;
+  padding: 25px 50px;
+  text-align: center;
+  box-shadow: 
+    0 0 30px rgba(107,142,35,0.6),
+    0 0 60px rgba(107,142,35,0.4),
+    inset 0 0 30px rgba(107,142,35,0.2);
+  z-index: 200;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.alert-box.show {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+.alert-type {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #6b8e23;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px rgba(107,142,35,0.8);
+}
+
+.alert-username {
+  font-family: 'Black Ops One', cursive;
+  font-size: 42px;
+  color: #fff;
+  text-shadow: 
+    0 0 20px rgba(255,255,255,0.5),
+    0 0 40px rgba(107,142,35,0.4);
+  animation: usernameGlow 2s ease-in-out infinite;
+}
+
+@keyframes usernameGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(107,142,35,0.4); }
+  50% { text-shadow: 0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(107,142,35,0.6); }
+}
+
+.alert-action {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #8a9a6a;
+  margin-top: 8px;
+}
+
+.alert-amount {
+  font-family: 'Black Ops One', cursive;
+  font-size: 32px;
+  color: #22c55e;
+  margin-top: 12px;
+  text-shadow: 0 0 20px rgba(34,197,94,0.6);
+}
+</style>
+</head>
+<body>
+
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<div class="top-banner">
+  <div class="logo-text">BLACK RHINO</div>
+  <div class="divider"></div>
+  <div class="status">LIVE // GRAYZONE WARFARE</div>
+</div>
+
+<div class="event-panel">
+  <div class="event-header">TACTICAL LOG</div>
+  <div id="event-list"></div>
+</div>
+
+<div class="chat-container">
+  <div class="chat-header">COMMS // CHAT</div>
+  <div class="chat-messages" id="chat-messages"></div>
+</div>
+
+<div class="goal-container">
+  <div class="goal-label">
+    <span>Sub Goal</span>
+    <span id="goal-text">0 / 5</span>
+  </div>
+  <div class="goal-bar"><div class="goal-fill" id="goal-fill" style="width: 0%"></div></div>
+</div>
+
+<div class="bottom-bar">
+  <div class="info-item">
+    <span class="info-label">Viewer:</span>
+    <span class="info-value" id="viewer-count">0</span>
+  </div>
+  <div class="info-item">
+    <span class="info-label">Uptime:</span>
+    <span class="info-value" id="uptime">00:00:00</span>
+  </div>
+  <div class="info-item">
+    <span class="info-label">Session:</span>
+    <span class="info-value" id="session">GZW</span>
+  </div>
+</div>
+
+<div class="alert-box" id="alert">
+  <div class="alert-type" id="alert-type">NEW FOLLOW</div>
+  <div class="alert-username" id="alert-user">USERNAME</div>
+  <div class="alert-action" id="alert-action">has entered the AO</div>
+  <div class="alert-amount" id="alert-amount"></div>
+</div>
+
+<div class="scanline"></div>
+<div class="crosshair-h"></div>
+<div class="crosshair-v"></div>
+
+<script>
+// Uptime
+let startTime = Date.now();
+function updateUptime() {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+  const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+  document.getElementById('uptime').textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateUptime, 1000);
+
+// Chat system
+const chatEl = document.getElementById('chat-messages');
+const chatHistory = [];
+
+function addChat(username, message, type = 'normal', badges = []) {
+  const msg = document.createElement('div');
+  msg.className = `chat-message ${type}`;
+
+  let badgeHTML = '';
+  badges.forEach(b => {
+    if (b === 'subscriber') badgeHTML += '<span class="chat-badge">SUB</span>';
+    if (b === 'moderator') badgeHTML += '<span class="chat-badge">MOD</span>';
+    if (b === 'vip') badgeHTML += '<span class="chat-badge">VIP</span>';
+  });
+
+  msg.innerHTML = `
+    <div class="chat-username">${badgeHTML}${username}</div>
+    <div class="chat-text">${message}</div>
+  `;
+
+  chatEl.appendChild(msg);
+  chatHistory.push({username, message, type});
+
+  while (chatEl.children.length > 15) {
+    chatEl.removeChild(chatEl.firstChild);
+  }
+}
+
+// Event system
+const eventList = document.getElementById('event-list');
+
+function addEvent(type, username, details = '') {
+  const item = document.createElement('div');
+  item.className = `event-item event-${type}`;
+
+  const icons = { follow: '+', sub: '★', raid: '⚔', bits: '◆', dono: '$' };
+
+  item.innerHTML = `
+    <div class="event-icon">${icons[type] || '+'}</div>
+    <div>
+      <span class="event-user">${username}</span>
+      <span class="event-type"> ${type}${details ? ' ' + details : ''}</span>
+    </div>
+  `;
+
+  eventList.appendChild(item);
+
+  while (eventList.children.length > 6) {
+    eventList.removeChild(eventList.firstChild);
+  }
+}
+
+// Alert system
+function showAlert(type, username, amount = '') {
+  const alert = document.getElementById('alert');
+  const configs = {
+    follow: { text: 'NEW FOLLOW', action: 'has entered the AO', color: '#3b82f6' },
+    sub: { text: 'NEW SUBSCRIBER', action: 'has joined the unit', color: '#a855f7' },
+    raid: { text: 'RAID INCOMING', action: 'is deploying with', color: '#ef4444' },
+    bits: { text: 'ORDNANCE DROPPED', action: 'sent', color: '#f59e0b' },
+    dono: { text: 'SUPPLY DROP', action: 'donated', color: '#22c55e' }
+  };
+
+  const cfg = configs[type] || configs.follow;
+
+  document.getElementById('alert-type').textContent = cfg.text;
+  document.getElementById('alert-type').style.color = cfg.color;
+  document.getElementById('alert-user').textContent = username;
+  document.getElementById('alert-action').textContent = cfg.action;
+  document.getElementById('alert-amount').textContent = amount;
+
+  alert.classList.add('show');
+  setTimeout(() => alert.classList.remove('show'), 6000);
+}
+
+// Update goal
+document.getElementById('goal-text').textContent = '0 / 5';
+document.getElementById('goal-fill').style.width = '0%';
+
+// StreamElements WebSocket connection
+// This connects to StreamElements overlay API for real events
+function connectStreamElements() {
+  // You'll get this URL from streamelements.com after creating an overlay
+  // Format: wss://realtime.streamelements.com/socket.io/?... 
+  console.log('Ready for StreamElements integration');
+  console.log('1. Go to streamelements.com and create an overlay');
+  console.log('2. Add this overlay URL to OBS as Browser Source');
+  console.log('3. Real events will appear automatically');
+}
+
+connectStreamElements();
+
+// Demo mode - remove this when connected to real Twitch
+// showAlert('follow', 'DemoUser');
+// addEvent('follow', 'DemoFollower');
+// addChat('DemoChatter', 'This is how chat will look!', 'sub', ['subscriber']);
+</script>
+
+</body>
+</html>
